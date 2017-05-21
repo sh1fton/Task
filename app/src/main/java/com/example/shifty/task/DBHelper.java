@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //Создаём класс для взаимодействия с SQLite
 public class DBHelper extends SQLiteOpenHelper{
@@ -59,4 +61,12 @@ public class DBHelper extends SQLiteOpenHelper{
         }
         return "";
     }
+
+    //Метод для валидации указанного email с помощью регулярного выражения
+    public static boolean checkEmail(String email){
+        Pattern pattern = Pattern.compile(".+@.+\\.[a-z]+");
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
 }

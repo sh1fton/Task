@@ -49,6 +49,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             //Проверям корректность заполнения полей и с помощью всплывающих сообщений уведомляем об ошибках ввода
             if(et_email.getText().toString().isEmpty() || et_password.getText().toString().isEmpty() || et_rep_password.getText().toString().isEmpty()){
                 Toast.makeText(RegistrationActivity.this, "Не заполнены все поля", Toast.LENGTH_SHORT).show();
+            }else if (!DBHelper.checkEmail(et_email.getText().toString())) {
+                Toast.makeText(RegistrationActivity.this, "Некорректный формат e-mail", Toast.LENGTH_SHORT).show();
             }else if (!et_password.getText().toString().equals(et_rep_password.getText().toString())){
                 Toast.makeText(RegistrationActivity.this, "Введённы пароли не совпадают ", Toast.LENGTH_SHORT).show();
             }else if (et_email.getText().toString().length() < 6){
