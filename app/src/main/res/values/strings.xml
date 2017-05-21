@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Task_android</string>
+    <string name="email_hint">Введите ваш email-адрес</string>
+    <string name="pass_hint">Введите ваш пароль</string>
+    <string name="login">Войти</string>
+    <string name="registration">Регистрация</string>
+    <string name="btnLogout">Выйти</string>
+    <string name="tvemail">email</string>
+    <string name="login_label">Успешный вход</string>
+    <string name="registr_label">Регистрация</string>
+    <string name="rep_pass_hint">Подтвердите ваш пароль</string>
+    <string name="btn_reg">Зарегистрировать</string>
+</resources>
