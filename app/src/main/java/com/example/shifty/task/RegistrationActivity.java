@@ -21,7 +21,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
 
     DBHelper dbHelper;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +36,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         btn_registration.setOnClickListener(this);
 
         dbHelper = new DBHelper(this);
-
     }
 
     @Override

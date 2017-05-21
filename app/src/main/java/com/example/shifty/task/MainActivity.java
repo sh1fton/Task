@@ -2,6 +2,7 @@ package com.example.shifty.task;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     DBHelper dbHelper;
 
+    //Создаём константу с название файла настроек
+    public static final String APP_PREFERENCES = "settings";
+    //Создаём константу с название ключа в файле настроек, в котором будем хранить залогиненого пользователя
+    public static final String APP_PREFERENCES_CURRENT_USER = "current_user";
+    private SharedPreferences sPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //Создаём экземпляр класса DBHelper
         dbHelper = new DBHelper(this);
+
+        sPref = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
+
+        //Проверяем содержит ли файл настроек поле с текущим пользователем
+        if (sPref.contains(APP_PREFERENCES_CURRENT_USER)) {
+            //Считываем значения поля текущего пользователя
+            String current_user = sPref.getString(APP_PREFERENCES_CURRENT_USER, "");
+            //Если оно не пустое то
+            if(!current_user.equals("")){
+                //Создаём Intent, заносим в него данные о email, с помощью которого была произведена авторизация
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.putExtra("user_email", current_user);
+                //С помощью Intent открываем экран успешного входа
+                startActivity(intent);
+            }
+        }
     }
 
     @Override
@@ -82,10 +104,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             //Сверяем введённый пароль с паролем из БД(предварительно переводим в md5)
                             if(DBHelper.md5(et_password.getText().toString()).equals(current_password)){
 
+                                //Заносим значение текущего пользователя в файл с настройками приложения
+                                SharedPreferences.Editor editor = sPref.edit();
+                                editor.putString(APP_PREFERENCES_CURRENT_USER, et_email.getText().toString());
+                                editor.apply();
+
                                 //Создаём Intent, заносим в него данные о email, с помощью которого была произведена авторизация
                                 intent = new Intent(this, LoginActivity.class);
                                 intent.putExtra("user_email", et_email.getText().toString());
-                                //С помощью Intent открываем экран авторизации
+                                //С помощью Intent открываем экран успешного входа
                                 startActivity(intent);
 
                             }else {
@@ -109,6 +136,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
 
+    }
+
+
+    //Создаём метод при переходе обратно к главному экрану приложения
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Проверяем содержит ли файл настроек поле с текущим пользователем
+        if (sPref.contains(APP_PREFERENCES_CURRENT_USER)) {
+            //Сбрасываем значение текущего пользователя на пустое поле
+            SharedPreferences.Editor editor = sPref.edit();
+            editor.putString(APP_PREFERENCES_CURRENT_USER, "");
+            editor.apply();
+        }
     }
 
 }
